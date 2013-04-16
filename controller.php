@@ -1,0 +1,81 @@
+<?php
+
+defined('C5_EXECUTE') or die("Access Denied.");
+
+class NewrelicPackage extends Package {
+
+    protected $pkgHandle = 'newrelic';
+    protected $appVersionRequired = '5.6.0';
+    protected $pkgVersion = '0.9.0';
+    private $package;
+
+    public function getPackageName() {
+        return t("Newrelic");
+    }
+
+    public function getPackageDescription() {
+        return t("Installs the Newrelic integration add-on.");
+    }
+
+    private function addSinglePage($path, $name, $description = '', $icon = '') {
+        Loader::model('single_page');
+        $page = Page::getByPath($path);
+        if (is_object($page) && $page->getCollectionID() > 0) {
+            return;
+        }
+        $sp = SinglePage::add($path, $this->package);
+        $sp->update(array('cName' => $name, 'cDescription' => $description));
+
+        if ($icon != '') {
+            $sp->setAttribute('icon_dashboard', $icon);
+        }
+    }
+
+    public function install() {
+        $this->package = parent::install();
+
+        // install dashboard pages
+        $this->addSinglePage('/dashboard/system/optimization/newrelic', t('Newrelic'), t('Newrelic perfomance monitoring.'));
+
+        // add default configuration values
+        $this->package->saveConfig('NEWRELIC_APPNAME', 'HOSTNAME');
+        $this->package->saveConfig('NEWRELIC_BACKGROUND_JOBS', '\/tools\/required\/jobs');
+        $this->package->saveConfig('NEWRELIC_IGNORE_TRANSACTIONS', '^\/dashboard\/');
+    }
+
+    public function on_start() {
+        $r = Request::get();
+
+        // make sure newrelic knows on which line we are
+        $url = '/' . $r->getRequestPath();
+        newrelic_name_transaction($url);
+
+        // load newrelic configuratoin
+        $pkg = Package::getByHandle('newrelic');
+        switch ($pkg->config('NEWRELIC_APPNAME')) {
+            case 'HOSTNAME':
+                newrelic_set_appname($_SERVER['HOST_NAME']);
+                break;
+            case 'SITENAME':
+                newrelic_set_appname(SITE);
+                break;
+            default:
+                newrelic_set_appname($pkg->config('NEWRELIC_APPNAME_VALUE'));
+                break;
+        }
+
+        $backgroundJobs = preg_split('/$\R?^:/m', $pkg->config('NEWRELIC_BACKGROUND_JOBS'));
+        foreach ($backgroundJobs as $backgroundJob) {
+            if (preg_match('/' . $backgroundJob . '/', $url)) {
+                newrelic_background_job(true);
+            }
+        }
+        $ignoreTransactions = preg_split('/$\R?^:/m', $pkg->config('NEWRELIC_IGNORE_TRANSACTIONS'));
+        foreach ($ignoreTransactions as $ignoreTransaction) {
+            if (preg_match('/' . $ignoreTransaction . '/', $url)) {
+                newrelic_ignore_transaction();
+            }
+        }
+    }
+
+}
