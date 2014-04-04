@@ -10,11 +10,11 @@ class NewrelicPackage extends Package {
     private $package;
 
     public function getPackageName() {
-        return t("Newrelic");
+        return t("New Relic");
     }
 
     public function getPackageDescription() {
-        return t("Installs the Newrelic integration add-on.");
+        return t("Installs the New Relic integration add-on.");
     }
 
     private function addSinglePage($path, $name, $description = '', $icon = '') {
@@ -35,7 +35,7 @@ class NewrelicPackage extends Package {
         $this->package = parent::install();
 
         // install dashboard pages
-        $this->addSinglePage('/dashboard/system/optimization/newrelic', t('Newrelic'), t('Newrelic perfomance monitoring.'));
+        $this->addSinglePage('/dashboard/system/optimization/newrelic', t('New Relic'), t('New Relic perfomance monitoring.'));
 
         // add default configuration values
         $this->package->saveConfig('NEWRELIC_APPNAME', 'HOSTNAME');

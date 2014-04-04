@@ -6,13 +6,13 @@ $ih = Loader::helper('concrete/interface');
 $dh = Loader::helper('concrete/dashboard');
 ?>
 
-<?php echo $dh->getDashboardPaneHeaderWrapper(t('Newrelic Settings'), t('Specify your custom Newrelic settings in this screen.'), 'span5 offset3', false); ?>
+<?php echo $dh->getDashboardPaneHeaderWrapper(t('New Relic Settings'), t('Specify your custom New Relic settings in this screen.'), 'span5 offset3', false); ?>
 
 <form method="post" id="form_newrelic_settings" action="<?php echo $this->action('save') ?>">
     <?php echo $vt->output(); ?>
 
     <div class="ccm-pane-body">
-        <h5><?php echo t('Appname used in Newrelic') ?></h5>
+        <h5><?php echo t('Appname used in New Relic') ?></h5>
         <div class="clearfix inputs-list">
             <label for="appName">
                 <input type="radio" name="appName" <?php echo $appName === 'SITENAME' ? 'checked="checked"' : '' ?> value="SITENAME"/> <?php echo t('Sitename (%s)', SITE) ?>
