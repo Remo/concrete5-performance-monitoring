@@ -44,6 +44,12 @@ class NewrelicPackage extends Package {
     }
 
     public function on_start() {
+
+        if (!extension_loaded('newrelic')) {
+            // don't try to call newrelic functions if extension is not loaded
+            return;
+        }
+
         $r = Request::get();
 
         // make sure newrelic knows on which line we are
