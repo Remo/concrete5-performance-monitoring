@@ -10,11 +10,11 @@ class NewrelicPackage extends Package {
     private $package;
 
     public function getPackageName() {
-        return t("Newrelic");
+        return t("New Relic");
     }
 
     public function getPackageDescription() {
-        return t("Installs the Newrelic integration add-on.");
+        return t("Installs the New Relic integration add-on.");
     }
 
     private function addSinglePage($path, $name, $description = '', $icon = '') {
@@ -35,15 +35,21 @@ class NewrelicPackage extends Package {
         $this->package = parent::install();
 
         // install dashboard pages
-        $this->addSinglePage('/dashboard/system/optimization/newrelic', t('Newrelic'), t('Newrelic perfomance monitoring.'));
+        $this->addSinglePage('/dashboard/system/optimization/newrelic', t('New Relic'), t('New Relic perfomance monitoring.'));
 
         // add default configuration values
-        $this->package->saveConfig('NEWRELIC_APPNAME', 'HOSTNAME');
+        $this->package->saveConfig('NEWRELIC_APPNAME', 'NONE');
         $this->package->saveConfig('NEWRELIC_BACKGROUND_JOBS', '\/tools\/required\/jobs');
         $this->package->saveConfig('NEWRELIC_IGNORE_TRANSACTIONS', '^\/dashboard\/');
     }
 
     public function on_start() {
+
+        if (!extension_loaded('newrelic')) {
+            // don't try to call newrelic functions if extension is not loaded
+            return;
+        }
+
         $r = Request::get();
 
         // make sure newrelic knows on which line we are
@@ -59,8 +65,11 @@ class NewrelicPackage extends Package {
             case 'SITENAME':
                 newrelic_set_appname(SITE);
                 break;
-            default:
+            case 'CUSTOM':
                 newrelic_set_appname($pkg->config('NEWRELIC_APPNAME_VALUE'));
+                break;
+            default:
+                // NONE
                 break;
         }
 
