@@ -38,7 +38,7 @@ class NewrelicPackage extends Package {
         $this->addSinglePage('/dashboard/system/optimization/newrelic', t('New Relic'), t('New Relic perfomance monitoring.'));
 
         // add default configuration values
-        $this->package->saveConfig('NEWRELIC_APPNAME', 'HOSTNAME');
+        $this->package->saveConfig('NEWRELIC_APPNAME', 'NONE');
         $this->package->saveConfig('NEWRELIC_BACKGROUND_JOBS', '\/tools\/required\/jobs');
         $this->package->saveConfig('NEWRELIC_IGNORE_TRANSACTIONS', '^\/dashboard\/');
     }
@@ -65,8 +65,11 @@ class NewrelicPackage extends Package {
             case 'SITENAME':
                 newrelic_set_appname(SITE);
                 break;
-            default:
+            case 'CUSTOM':
                 newrelic_set_appname($pkg->config('NEWRELIC_APPNAME_VALUE'));
+                break;
+            default:
+                // NONE
                 break;
         }
 

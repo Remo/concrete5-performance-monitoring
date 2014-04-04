@@ -15,6 +15,10 @@ $dh = Loader::helper('concrete/dashboard');
         <h5><?php echo t('Appname used in New Relic') ?></h5>
         <div class="clearfix inputs-list">
             <label for="appName">
+                <input type="radio" name="appName" <?php echo $appName === 'NONE' ? 'checked="checked"' : '' ?> value="NONE"/> <?php echo t('Default (don\'t override appname)') ?>
+            </label>
+
+            <label for="appName">
                 <input type="radio" name="appName" <?php echo $appName === 'SITENAME' ? 'checked="checked"' : '' ?> value="SITENAME"/> <?php echo t('Sitename (%s)', SITE) ?>
             </label>
 
