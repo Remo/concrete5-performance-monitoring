@@ -56,17 +56,19 @@ class NewrelicPackage extends Package {
         $url = '/' . $r->getRequestPath();
         newrelic_name_transaction($url);
 
-        // load newrelic configuratoin
+        // load newrelic configuration
         $pkg = Package::getByHandle('newrelic');
+        $xmit = $pkg->config('NEWRELIC_XMIT');
+        
         switch ($pkg->config('NEWRELIC_APPNAME')) {
             case 'HOSTNAME':
-                newrelic_set_appname($_SERVER['HOST_NAME']);
+                newrelic_set_appname($_SERVER['HOST_NAME'], '', $xmit);
                 break;
             case 'SITENAME':
-                newrelic_set_appname(SITE);
+                newrelic_set_appname(SITE, '', $xmit);
                 break;
             case 'CUSTOM':
-                newrelic_set_appname($pkg->config('NEWRELIC_APPNAME_VALUE'));
+                newrelic_set_appname($pkg->config('NEWRELIC_APPNAME_VALUE'), '', $xmit);
                 break;
             default:
                 // NONE

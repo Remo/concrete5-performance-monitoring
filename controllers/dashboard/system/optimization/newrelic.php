@@ -27,6 +27,7 @@ class DashboardSystemOptimizationNewrelicController extends Controller {
         $this->set('appNameValue', $pkg->config('NEWRELIC_APPNAME_VALUE'));
         $this->set('backgroundJobs', $pkg->config('NEWRELIC_BACKGROUND_JOBS'));
         $this->set('ignoreTransactions', $pkg->config('NEWRELIC_IGNORE_TRANSACTIONS'));
+        $this->set('xmit', $pkg->config('NEWRELIC_XMIT'));
 
         $this->addHeaderItem($html->javascript('newrelic.settings.js', 'newrelic'));
         $this->addHeaderItem($html->css('newrelic.settings.css', 'newrelic'));
@@ -49,6 +50,7 @@ class DashboardSystemOptimizationNewrelicController extends Controller {
             $pkg->saveConfig('NEWRELIC_APPNAME_VALUE', $this->post('appNameValue'));
             $pkg->saveConfig('NEWRELIC_BACKGROUND_JOBS', $this->post('backgroundJobs'));
             $pkg->saveConfig('NEWRELIC_IGNORE_TRANSACTIONS', $this->post('ignoreTransactions'));
+            $pkg->saveConfig('NEWRELIC_XMIT', $this->post('xmit'));
 
             $this->redirect('/dashboard/system/optimization/newrelic/', 'save_complete');
         } else {
