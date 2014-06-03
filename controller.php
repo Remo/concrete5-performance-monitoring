@@ -6,7 +6,7 @@ class NewrelicPackage extends Package {
 
     protected $pkgHandle = 'newrelic';
     protected $appVersionRequired = '5.6.0';
-    protected $pkgVersion = '0.9.0';
+    protected $pkgVersion = '0.9.1';
     private $package;
 
     public function getPackageName() {
