@@ -6,7 +6,7 @@ class NewrelicPackage extends Package {
 
     protected $pkgHandle = 'newrelic';
     protected $appVersionRequired = '5.6.0';
-    protected $pkgVersion = '0.9.0';
+    protected $pkgVersion = '0.9.1';
     private $package;
 
     public function getPackageName() {
@@ -58,8 +58,8 @@ class NewrelicPackage extends Package {
 
         // load newrelic configuration
         $pkg = Package::getByHandle('newrelic');
-        $xmit = $pkg->config('NEWRELIC_XMIT');
-        
+        $xmit = ($pkg->config('NEWRELIC_XMIT') === '1');
+
         switch ($pkg->config('NEWRELIC_APPNAME')) {
             case 'HOSTNAME':
                 newrelic_set_appname($_SERVER['HOST_NAME'], '', $xmit);

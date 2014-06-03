@@ -32,7 +32,7 @@ $dh = Loader::helper('concrete/dashboard');
             </label>
         </div>
         
-        <h5><?php echo t('Discard transaction on appliation name change') ?></h5>
+        <h5><?php echo t('Keep transaction on appliation name change') ?></h5>
         <div class="clearfix inputs-list">
             <label for="xmitYes">
                 <input type="radio" id="xmitYes" name="xmit" <?php echo $xmit === '1' ? 'checked="checked"' : '' ?> value="1"/> <?php echo t('Yes') ?>
