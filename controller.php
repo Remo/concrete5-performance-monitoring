@@ -58,8 +58,8 @@ class NewrelicPackage extends Package {
 
         // load newrelic configuration
         $pkg = Package::getByHandle('newrelic');
-        $xmit = $pkg->config('NEWRELIC_XMIT');
-        
+        $xmit = (bool) $pkg->config('NEWRELIC_XMIT');
+
         switch ($pkg->config('NEWRELIC_APPNAME')) {
             case 'HOSTNAME':
                 newrelic_set_appname($_SERVER['HOST_NAME'], '', $xmit);
